@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
 import 'app_screens/home.dart';
 
+//void main() {
+//  runApp(MaterialApp(
+//    title: "Explore Widgets",
+//    home: Scaffold(
+//      appBar: AppBar(
+//        title: Text("Basic List View"),
+//      ),
+//      body: getListView(),
+//    ),
+//  ));
+//}
+
 void main() {
   runApp(MaterialApp(
-    title: "Explore Widgets",
+    title: "Explore UI Widgets",
     home: Scaffold(
       appBar: AppBar(
-        title: Text("Basic List View"),
+        title: Text("Long List View"),
       ),
       body: getListView(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          debugPrint("Fab Clicked Plus");
+        },
+        child: Icon(Icons.add),
+        tooltip: "Add One More Item",
+      ),
     ),
   ));
 }
 
-Widget getListView() {
+Widget getListViewOld() {
   var listView = ListView(
     children: <Widget>[
       ListTile(
@@ -21,7 +40,7 @@ Widget getListView() {
         title: Text("Landscape"),
         subtitle: Text("Beautiful View !"),
         trailing: Icon(Icons.wb_sunny),
-        onTap: (){
+        onTap: () {
           debugPrint("Lanscape tapped");
         },
       ),
@@ -34,8 +53,44 @@ Widget getListView() {
         title: Text("Phone"),
       ),
       Text("Yet another element in list"),
-      Container(color: Colors.red, height: 50.0,)
+      Container(
+        color: Colors.red,
+        height: 50.0,
+      )
     ],
   );
   return listView;
+}
+//Return 100 items
+List<String> getListElement() {
+  var items = List<String>.generate(1000, (counter) => "Item $counter");
+  return items;
+}
+
+Widget getListView() {
+  var listItems = getListElement();
+
+  var listView = ListView.builder(itemBuilder: (context, index) {
+    return ListTile(
+      leading: Icon(Icons.arrow_right),
+      title: Text(listItems[index]),
+      onTap: (){
+        debugPrint("Item Clicked $index" );
+        debugPrint("${listItems[index]} was tapped" );
+        showSnackBar(context, listItems);
+      },
+    );
+  });
+  return listView;
+}
+
+void showSnackBar(BuildContext context, List<String> listItems){
+  var snackBar = SnackBar(
+    content: Text("Items was clicked ${listItems[0]}"),
+    action: SnackBarAction(label: "UNDO",
+        onPressed: (){
+      debugPrint("Permofiming dummy Undo");
+        }),
+  );
+  Scaffold.of(context).showSnackBar(snackBar);
 }
